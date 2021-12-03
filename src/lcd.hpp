@@ -134,7 +134,9 @@ struct LcdDrawWidget : LightWidget {
     }
 
     // Decides what to draw depending on the layout.
-    void draw(const DrawArgs &args) override {
+    void drawLayer(const DrawArgs& args, int layer) override {
+        if (layer != 1)
+            return;
 
         nvgScale(args.vg, 1.5, 1.5);
 
