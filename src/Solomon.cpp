@@ -787,7 +787,7 @@ struct Solomon : Module {
 template <typename TModule>
 struct TotalNodesKnob : W::KnobSnap {
     void onDragMove(const event::DragMove& e) override {
-        TModule* module = dynamic_cast<TModule*>(paramQuantity->module);
+        TModule* module = dynamic_cast<TModule*>(getParamQuantity()->module);
 
         module->lcdStatus.lastInteraction = 0.f;
         module->lcdStatus.dirty = true;
@@ -803,7 +803,7 @@ struct TotalNodesKnob : W::KnobSnap {
 template <typename TModule>
 struct ScaleKnob : W::KnobSnap {
     void onDragMove(const event::DragMove& e) override {
-        TModule* module = dynamic_cast<TModule*>(paramQuantity->module);
+        TModule* module = dynamic_cast<TModule*>(getParamQuantity()->module);
 
         module->lcdStatus.lastInteraction = 0.f;
         module->lcdStatus.dirty = true;
@@ -831,7 +831,7 @@ struct ScaleKnob : W::KnobSnap {
 template <typename TModule>
 struct MinMaxKnob : W::Knob {
     void onDragMove(const event::DragMove& e) override {
-        TModule* module = dynamic_cast<TModule*>(paramQuantity->module);
+        TModule* module = dynamic_cast<TModule*>(getParamQuantity()->module);
 
         module->lcdStatus.lastInteraction = 0.f;
         module->lcdStatus.dirty = true;
@@ -847,7 +847,7 @@ struct MinMaxKnob : W::Knob {
 template <typename TModule>
 struct SlideKnob : W::Knob {
     void onDragMove(const event::DragMove& e) override {
-        TModule* module = dynamic_cast<TModule*>(paramQuantity->module);
+        TModule* module = dynamic_cast<TModule*>(getParamQuantity()->module);
 
         module->lcdStatus.lastInteraction = 0.f;
         module->lcdStatus.dirty = true;

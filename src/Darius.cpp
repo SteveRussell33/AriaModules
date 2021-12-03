@@ -1024,8 +1024,8 @@ struct Darius : Module {
 
 struct KnobLcd : W::Knob {
     void onDragMove(const event::DragMove& e) override {
-         dynamic_cast<Darius*>(paramQuantity->module)->lcdLastInteraction = 0.f;
-         dynamic_cast<Darius*>(paramQuantity->module)->lcdStatus.dirty = true;
+         dynamic_cast<Darius*>(getParamQuantity()->module)->lcdLastInteraction = 0.f;
+         dynamic_cast<Darius*>(getParamQuantity()->module)->lcdStatus.dirty = true;
         W::Knob::onDragMove(e);
     }
 };
@@ -1033,7 +1033,7 @@ struct KnobLcd : W::Knob {
 
 struct KnobMinMax : KnobLcd {
     void onDragMove(const event::DragMove& e) override {
-         dynamic_cast<Darius*>(paramQuantity->module)->lcdMode = MINMAX_MODE;
+         dynamic_cast<Darius*>(getParamQuantity()->module)->lcdMode = MINMAX_MODE;
         KnobLcd::onDragMove(e);
     }
 };
@@ -1044,23 +1044,23 @@ struct KnobScale : KnobLcd {
         KnobLcd();
     }
     void onDragMove(const event::DragMove& e) override {
-       dynamic_cast<Darius*>(paramQuantity->module)->lcdMode = SCALE_MODE;
+       dynamic_cast<Darius*>(getParamQuantity()->module)->lcdMode = SCALE_MODE;
         KnobLcd::onDragMove(e);
     }
 };
 
 struct KnobSlide : KnobLcd {
     void onDragMove(const event::DragMove& e) override {
-        dynamic_cast<Darius*>(paramQuantity->module)->lcdMode = SLIDE_MODE;
+        dynamic_cast<Darius*>(getParamQuantity()->module)->lcdMode = SLIDE_MODE;
         KnobLcd::onDragMove(e);
     }
 };
 
 struct RockerSwitchHorizontalModeReset : W::RockerSwitchHorizontal {
     void onDragStart(const event::DragStart& e) override {
-        dynamic_cast<Darius*>(paramQuantity->module)->lcdMode = DEFAULT_MODE;
-        dynamic_cast<Darius*>(paramQuantity->module)->lcdLastInteraction = 0.f;
-        dynamic_cast<Darius*>(paramQuantity->module)->lcdStatus.dirty = true;
+        dynamic_cast<Darius*>(getParamQuantity()->module)->lcdMode = DEFAULT_MODE;
+        dynamic_cast<Darius*>(getParamQuantity()->module)->lcdLastInteraction = 0.f;
+        dynamic_cast<Darius*>(getParamQuantity()->module)->lcdStatus.dirty = true;
         W::RockerSwitchHorizontal::onDragStart(e);
     }
 };
@@ -1079,7 +1079,7 @@ TParamWidget* createMainParam(math::Vec pos, Darius* module, int paramId, int la
     TParamWidget* o = new TParamWidget(module, lastChanged);
     o->box.pos = pos;
     if (module) {
-        o->paramQuantity = module->paramQuantities[paramId];
+        // o->paramQuantity = module->paramQuantities[paramId];
     }
     return o;
 }

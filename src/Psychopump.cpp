@@ -862,6 +862,7 @@ struct PsychopumpLcdWidget : TransparentWidget {
 
 struct CvKnob : W::KnobTransparent {
     Psychopump* module;
+    ParamQuantity* paramQuantity = NULL;
     size_t channel = 0;
     size_t output = 0;
 
@@ -877,6 +878,7 @@ struct CvKnob : W::KnobTransparent {
 
 struct GateLengthKnob : W::Knob {
     Psychopump* module;
+    ParamQuantity* paramQuantity = NULL;
     size_t channel = 0;
 
     void onDragMove(const event::DragMove& e) override {
@@ -933,6 +935,7 @@ struct ChannelLabelField : TextField {
 
 struct OutputLabelField : TextField {
     Psychopump* module;
+    ParamQuantity* paramQuantity = NULL;
     size_t output = 0;
 
     void onSelectKey(const event::SelectKey& e) override {
@@ -956,6 +959,7 @@ struct OutputLabelField : TextField {
 
 struct GateLabelButton : W::LitSvgSwitchUnshadowed {
     Psychopump* module;
+    ParamQuantity* paramQuantity = NULL;
     size_t channel = 0;
     GateLabelButton() {
         addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/components/label-button-right-off.svg")));
@@ -981,6 +985,7 @@ struct GateLabelButton : W::LitSvgSwitchUnshadowed {
 
 struct OutputLabelButton : W::LitSvgSwitchUnshadowed {
     Psychopump* module;
+    ParamQuantity* paramQuantity = NULL;
     size_t output = 0;
     OutputLabelButton() {
         addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/components/label-button-bottom-off.svg")));
