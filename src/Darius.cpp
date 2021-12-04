@@ -161,10 +161,11 @@ struct Darius : Module {
         configParam(KEY_PARAM, 0.f, 11.f, 0.f, "Key");
         configParam(SCALE_PARAM, 0.f, (float) Quantizer::NUM_SCALES - 1, 2.f, "Scale");
         configParam(SLIDE_PARAM, 0.f, 10.f, 0.f, "Slide");
-        for (size_t i = 0; i < STEP9START; i++)
+        for (size_t i = 0; i < 36; i++)
             configParam(CV_PARAM + i, 0.f, 10.f, 5.f, "CV");
-        for (size_t i = 0; i < STEP8START; i++)
+        for (size_t i = 0; i < 36; i++)
             configParam(ROUTE_PARAM + i, 0.f, 1.f, 0.5f, "Random route");
+        
         displayDivider.setDivision(DISPLAYDIVIDER);
         processDivider.setDivision(PROCESSDIVIDER);
         lcdStatus.layout = Lcd::TEXT1_AND_TEXT2_LAYOUT;
@@ -1024,8 +1025,8 @@ struct Darius : Module {
 
 struct KnobLcd : W::Knob {
     void onDragMove(const event::DragMove& e) override {
-         dynamic_cast<Darius*>(getParamQuantity()->module)->lcdLastInteraction = 0.f;
-         dynamic_cast<Darius*>(getParamQuantity()->module)->lcdStatus.dirty = true;
+        dynamic_cast<Darius*>(module)->lcdLastInteraction = 0.f;
+        dynamic_cast<Darius*>(module)->lcdStatus.dirty = true;
         W::Knob::onDragMove(e);
     }
 };
@@ -1033,7 +1034,7 @@ struct KnobLcd : W::Knob {
 
 struct KnobMinMax : KnobLcd {
     void onDragMove(const event::DragMove& e) override {
-         dynamic_cast<Darius*>(getParamQuantity()->module)->lcdMode = MINMAX_MODE;
+        dynamic_cast<Darius*>(module)->lcdMode = MINMAX_MODE;
         KnobLcd::onDragMove(e);
     }
 };
@@ -1041,26 +1042,25 @@ struct KnobMinMax : KnobLcd {
 struct KnobScale : KnobLcd {
     KnobScale() {
         snap = true;
-        KnobLcd();
     }
     void onDragMove(const event::DragMove& e) override {
-       dynamic_cast<Darius*>(getParamQuantity()->module)->lcdMode = SCALE_MODE;
+        dynamic_cast<Darius*>(module)->lcdMode = SCALE_MODE;
         KnobLcd::onDragMove(e);
     }
 };
 
 struct KnobSlide : KnobLcd {
     void onDragMove(const event::DragMove& e) override {
-        dynamic_cast<Darius*>(getParamQuantity()->module)->lcdMode = SLIDE_MODE;
+        dynamic_cast<Darius*>(module)->lcdMode = SLIDE_MODE;
         KnobLcd::onDragMove(e);
     }
 };
 
 struct RockerSwitchHorizontalModeReset : W::RockerSwitchHorizontal {
     void onDragStart(const event::DragStart& e) override {
-        dynamic_cast<Darius*>(getParamQuantity()->module)->lcdMode = DEFAULT_MODE;
-        dynamic_cast<Darius*>(getParamQuantity()->module)->lcdLastInteraction = 0.f;
-        dynamic_cast<Darius*>(getParamQuantity()->module)->lcdStatus.dirty = true;
+        dynamic_cast<Darius*>(module)->lcdMode = DEFAULT_MODE;
+        dynamic_cast<Darius*>(module)->lcdLastInteraction = 0.f;
+        dynamic_cast<Darius*>(module)->lcdStatus.dirty = true;
         W::RockerSwitchHorizontal::onDragStart(e);
     }
 };
@@ -1078,9 +1078,14 @@ template <class TParamWidget>
 TParamWidget* createMainParam(math::Vec pos, Darius* module, int paramId, int lastChanged) {
     TParamWidget* o = new TParamWidget(module, lastChanged);
     o->box.pos = pos;
-    if (module) {
-        // o->paramQuantity = module->paramQuantities[paramId];
-    }
+    o->module = module;
+    return o;
+}
+
+template <class TParamWidget>
+TParamWidget* createModuleParam(math::Vec pos, Darius* module, int paramId) {
+    TParamWidget* o = createParam<TParamWidget>(pos, module, paramId);
+    o->module = module;
     return o;
 }
 
@@ -1239,24 +1244,24 @@ struct DariusWidget : W::ModuleWidget {
         addChild(lcd);
 
         // Quantizer toggle
-        addParam(createParam<RockerSwitchHorizontalModeReset>(mm2px(Vec(11.1, 99.7)), module, Darius::QUANTIZE_TOGGLE_PARAM));
+        addParam(createModuleParam<RockerSwitchHorizontalModeReset>(mm2px(Vec(11.1, 99.7)), module, Darius::QUANTIZE_TOGGLE_PARAM));
 
         // Voltage Range
         addParam(createParam<RockerSwitchHorizontalFlipped>(mm2px(Vec(28.0, 118.8)), module, Darius::RANGE_PARAM));
 
         // Min & Max
-        addParam(createParam<KnobMinMax>(mm2px(Vec(49.5f, 112.f)), module, Darius::MIN_PARAM)); 
-        addParam(createParam<KnobMinMax>(mm2px(Vec(59.5f, 112.f)), module, Darius::MAX_PARAM)); 
+        addParam(createModuleParam<KnobMinMax>(mm2px(Vec(49.5f, 112.f)), module, Darius::MIN_PARAM)); 
+        addParam(createModuleParam<KnobMinMax>(mm2px(Vec(59.5f, 112.f)), module, Darius::MAX_PARAM)); 
 
         // Quantizer Key & Scale
-        addParam(createParam<KnobScale>(mm2px(Vec(49.5f, 99.f)), module, Darius::KEY_PARAM));
-        addParam(createParam<KnobScale>(mm2px(Vec(59.5f, 99.f)), module, Darius::SCALE_PARAM));
+        addParam(createModuleParam<KnobScale>(mm2px(Vec(49.5f, 99.f)), module, Darius::KEY_PARAM));
+        addParam(createModuleParam<KnobScale>(mm2px(Vec(59.5f, 99.f)), module, Darius::SCALE_PARAM));
 
         // External Scale
         addStaticInput(mm2px(Vec(69.5, 99.0)), module, Darius::EXT_SCALE_INPUT);
 
         // Slide
-        addParam(createParam<KnobSlide>(mm2px(Vec(69.5, 112.0)), module, Darius::SLIDE_PARAM));
+        addParam(createModuleParam<KnobSlide>(mm2px(Vec(69.5, 112.0)), module, Darius::SLIDE_PARAM));
 
         // Output!
         addStaticOutput(mm2px(Vec(79.5, 112.0)), module, Darius::GLOBAL_GATE_OUTPUT);

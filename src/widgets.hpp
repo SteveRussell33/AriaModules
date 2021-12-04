@@ -595,6 +595,7 @@ struct RockerSwitchVertical : SvgSwitchUnshadowed {
 
 // 8.2mm
 struct Knob : app::SvgKnob {
+    engine::Module* module = NULL;
     Knob() {
         minAngle = -0.83 * M_PI;
         maxAngle = 0.83 * M_PI;
