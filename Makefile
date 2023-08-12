@@ -45,7 +45,7 @@ endif
 endif
 $(quickjs):
 	cd dep && git clone "https://github.com/JerrySievert/QuickJS.git"
-	cd dep/QuickJS && git checkout b70d5344013836544631c361ae20569b978176c9
+	cd dep/QuickJS && git checkout d6008cbdb5028642ba9dbc4fd5064ac5621a14e7
 	cd dep/QuickJS && CROSS_PREFIX=$(CROSS_PREFIX) $(MAKE) $(QUICKJS_MAKE_FLAGS)
 	cd dep/QuickJS && CROSS_PREFIX=$(CROSS_PREFIX) $(MAKE) $(QUICKJS_MAKE_FLAGS) install
 
