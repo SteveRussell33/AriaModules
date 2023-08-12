@@ -924,7 +924,7 @@ struct ChannelLabelField : TextField {
 
     // Auto-focus and auto-save
     void step() override {
-        APP->event->setSelected(this);
+        APP->event->setSelectedWidget(this);
         module->channelLabels[channel] = text;
         TextField::step();
     }
@@ -947,7 +947,7 @@ struct OutputLabelField : TextField {
     }
 
     void step() override {
-        APP->event->setSelected(this);
+        APP->event->setSelectedWidget(this);
         module->outputLabels[output] = text;
         TextField::step();
     }
