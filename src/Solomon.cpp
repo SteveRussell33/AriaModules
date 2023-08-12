@@ -134,6 +134,35 @@ struct Solomon : Module {
     Solomon() {
         config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
 
+        configInput(EXT_SCALE_INPUT, "External scale");
+        configInput(STEP_QUEUE_INPUT, "Step: Queue");
+        configInput(STEP_TELEPORT_INPUT, "Step: Teleport");
+        configInput(STEP_WALK_INPUT, "Step: Walk");
+        configInput(STEP_BACK_INPUT, "Step: Back");
+        configInput(STEP_FORWARD_INPUT, "Step: Forward");
+        configInput(RESET_INPUT, "Reset");
+
+        configOutput(GLOBAL_TRIG_OUTPUT, "Trigger");
+        configOutput(GLOBAL_CV_OUTPUT, "1V/Octave pitch");
+
+        for (unsigned i=0; i<NODES; i++) {
+            configInput(NODE_SUB_1_SD_INPUT + i, string::f("Step %d: Sub 1", i + 1));
+            configInput(NODE_SUB_2_SD_INPUT + i, string::f("Step %d: Sub 2", i + 1));
+            configInput(NODE_SUB_3_SD_INPUT + i, string::f("Step %d: Sub 3", i + 1));
+            configInput(NODE_SUB_1_OCT_INPUT + i, string::f("Step %d: Sub Oct", i + 1));
+            configInput(NODE_ADD_1_SD_INPUT + i, string::f("Step %d: Add 1", i + 1));
+            configInput(NODE_ADD_2_SD_INPUT + i, string::f("Step %d: Add 2", i + 1));
+            configInput(NODE_ADD_3_SD_INPUT + i, string::f("Step %d: Add 3", i + 1));
+            configInput(NODE_ADD_1_OCT_INPUT + i, string::f("Step %d: Add Oct", i + 1));
+            configInput(NODE_QUEUE_INPUT + i, string::f("Step %d: Queue", i + 1));
+
+            configOutput(NODE_GATE_OUTPUT + i, string::f("Step %d: Gate", i + 1));
+            configOutput(NODE_RANDOM_OUTPUT + i, string::f("Step %d: Random", i + 1));
+            configOutput(NODE_LATCH_OUTPUT + i, string::f("Step %d: Latch", i + 1));
+            configOutput(NODE_DELAY_OUTPUT + i, string::f("Step %d: Delay", i + 1));
+            configOutput(NODE_CV_OUTPUT + i, string::f("Step %d: CV", i + 1));
+        }
+
         configParam(MIN_PARAM, 1.f, 9.f, 3.f, "Minimum Note");
         configParam(MAX_PARAM, 1.f, 9.f, 5.f, "Maximum Note");
         configParam(SLIDE_PARAM, 0.f, 10.f, 0.f, "Slide");

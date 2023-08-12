@@ -853,8 +853,7 @@ struct PianoKey : W::LitSvgSwitchUnshadowed {
     int note = 0;
 
     void step() override {
-        ParamQuantity* const paramQuantity = getParamQuantity();
-        if (paramQuantity){
+        if (ParamQuantity* const paramQuantity = getParamQuantity()){
             currentPianoDisplay = dynamic_cast<Qqqq*>(paramQuantity->module)->litKeys[note];
             if (currentPianoDisplay == true && currentPianoDisplay != lastPianoDisplay) {
                 lsw->setSvg(frames[2]);

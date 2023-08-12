@@ -862,7 +862,6 @@ struct PsychopumpLcdWidget : TransparentWidget {
 
 struct CvKnob : W::KnobTransparent {
     Psychopump* module;
-    ParamQuantity* paramQuantity = NULL;
     size_t channel = 0;
     size_t output = 0;
 
@@ -878,7 +877,6 @@ struct CvKnob : W::KnobTransparent {
 
 struct GateLengthKnob : W::Knob {
     Psychopump* module;
-    ParamQuantity* paramQuantity = NULL;
     size_t channel = 0;
 
     void onDragMove(const event::DragMove& e) override {
@@ -926,7 +924,7 @@ struct ChannelLabelField : TextField {
 
     // Auto-focus and auto-save
     void step() override {
-        APP->event->setSelected(this);
+        APP->event->setSelectedWidget(this);
         module->channelLabels[channel] = text;
         TextField::step();
     }
@@ -935,7 +933,6 @@ struct ChannelLabelField : TextField {
 
 struct OutputLabelField : TextField {
     Psychopump* module;
-    ParamQuantity* paramQuantity = NULL;
     size_t output = 0;
 
     void onSelectKey(const event::SelectKey& e) override {
@@ -950,7 +947,7 @@ struct OutputLabelField : TextField {
     }
 
     void step() override {
-        APP->event->setSelected(this);
+        APP->event->setSelectedWidget(this);
         module->outputLabels[output] = text;
         TextField::step();
     }
@@ -959,7 +956,6 @@ struct OutputLabelField : TextField {
 
 struct GateLabelButton : W::LitSvgSwitchUnshadowed {
     Psychopump* module;
-    ParamQuantity* paramQuantity = NULL;
     size_t channel = 0;
     GateLabelButton() {
         addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/components/label-button-right-off.svg")));
@@ -985,7 +981,6 @@ struct GateLabelButton : W::LitSvgSwitchUnshadowed {
 
 struct OutputLabelButton : W::LitSvgSwitchUnshadowed {
     Psychopump* module;
-    ParamQuantity* paramQuantity = NULL;
     size_t output = 0;
     OutputLabelButton() {
         addFrame(APP->window->loadSvg(asset::plugin(pluginInstance, "res/components/label-button-bottom-off.svg")));
@@ -1096,10 +1091,10 @@ struct PsychopumpWidget : W::ModuleWidget {
             GateLabelButton* gateLabelButton = new GateLabelButton;
             gateLabelButton->box.pos = mm2px(Vec(xOffset + 4.1f, yOffset + i * 10.f));
             gateLabelButton->channel = i;
-            if (module) {
-                gateLabelButton->module = module;
-                gateLabelButton->paramQuantity = module->paramQuantities[Psychopump::CHANNEL_LABEL_PARAM + i];
-            }
+            gateLabelButton->module = module;
+            gateLabelButton->app::ParamWidget::module = module;
+            gateLabelButton->app::ParamWidget::paramId = Psychopump::CHANNEL_LABEL_PARAM + i;
+            gateLabelButton->initParamQuantity();
             addParam(gateLabelButton);
             addStaticInput(mm2px(Vec(xOffset, yOffset + i * 10.f)), module, Psychopump::GATE_INPUT + i);
         }
@@ -1121,7 +1116,9 @@ struct PsychopumpWidget : W::ModuleWidget {
             gateLengthKnob->module = module;
             gateLengthKnob->box.pos = mm2px(Vec(xOffset, yOffset + i * 10.f));
             gateLengthKnob->channel = i;
-            if (module) gateLengthKnob->paramQuantity = module->paramQuantities[Psychopump::GATE_LENGTH_PARAM + i];
+            gateLengthKnob->app::ParamWidget::module = module;
+            gateLengthKnob->app::ParamWidget::paramId = Psychopump::GATE_LENGTH_PARAM + i;
+            gateLengthKnob->initParamQuantity();
             addParam(gateLengthKnob);
         }
     }
@@ -1171,7 +1168,9 @@ struct PsychopumpWidget : W::ModuleWidget {
         CvKnob* cvKnob = new CvKnob;
         cvKnob->module = module;
         cvKnob->box.pos = mm2px(Vec(xOffset, yOffset));
-        if (module) cvKnob->paramQuantity = module->paramQuantities[cvParam];
+        cvKnob->app::ParamWidget::module = module;
+        cvKnob->app::ParamWidget::paramId = cvParam;
+        cvKnob->initParamQuantity();
         cvKnob->channel = channel;
         cvKnob->output = output;
         addParam(cvKnob);
@@ -1211,10 +1210,10 @@ struct PsychopumpWidget : W::ModuleWidget {
             OutputLabelButton* outputLabelButton = new OutputLabelButton;
             outputLabelButton->box.pos = mm2px(Vec(xOffset + i * 14.f, yOffset + 4.1f));
             outputLabelButton->output = i;
-            if (module) {
-                outputLabelButton->module = module;
-                outputLabelButton->paramQuantity = module->paramQuantities[Psychopump::OUTPUT_LABEL_PARAM + i];
-            }
+            outputLabelButton->module = module;
+            outputLabelButton->app::ParamWidget::module = module;
+            outputLabelButton->app::ParamWidget::paramId = Psychopump::OUTPUT_LABEL_PARAM + i;
+            outputLabelButton->initParamQuantity();
             addParam(outputLabelButton);
         }
 

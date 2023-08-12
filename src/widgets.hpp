@@ -220,7 +220,7 @@ struct JackLight : app::ModuleLightWidget {
         this->box.size = mm2px(math::Vec(8.0, 8.0));
         this->bgColor = nvgRGB(0x0e, 0x69, 0x77);
     }
-
+    
     void drawLayer(const DrawArgs& args, int layer) override {
         if (layer != 1)
             return;
@@ -270,7 +270,7 @@ struct JackStaticLight : app::LightWidget {
     JackStaticLight() {
         this->box.size = mm2px(math::Vec(8.0, 8.0));
     }
-
+    
     void drawLayer(const DrawArgs& args, int layer) override {
         if (layer != 1)
             return;
@@ -287,6 +287,7 @@ struct JackStaticLight : app::LightWidget {
         nvgFillColor(args.vg, this->color);
         nvgFill(args.vg);
     }
+
 };
 
 
@@ -359,7 +360,7 @@ struct KnobLight : ModuleLightWidget {
         this->box.size = mm2px(math::Vec(8.0f, 8.0f));
         this->bgColor = nvgRGB(0x0e, 0x69, 0x77);
     }
-
+    
     void drawLayer(const DrawArgs& args, int layer) override {
         if (layer != 1)
             return;
@@ -393,7 +394,7 @@ struct KnobLight : ModuleLightWidget {
             nvgStrokeColor(args.vg, nvgRGB(0x00, 0x00, 0x00));
             nvgStrokeWidth(args.vg, 2.f);
             nvgStroke(args.vg);
-        }
+        }        
     }
 
 };
@@ -433,7 +434,7 @@ struct StatusLight : ModuleLightWidget {
         this->bgColor = nvgRGB(0x0e, 0x69, 0x77);
         this->borderColor = nvgRGB(0x08, 0x3d, 0x45);
     }
-
+    
     void drawLayer(const DrawArgs& args, int layer) override {
         if (layer != 1)
             return;
@@ -595,7 +596,6 @@ struct RockerSwitchVertical : SvgSwitchUnshadowed {
 
 // 8.2mm
 struct Knob : app::SvgKnob {
-    engine::Module* module = NULL;
     Knob() {
         minAngle = -0.83 * M_PI;
         maxAngle = 0.83 * M_PI;
